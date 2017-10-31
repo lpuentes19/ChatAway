@@ -10,6 +10,15 @@ import UIKit
 
 class LoginViewController: UIViewController {
 
+    let profileImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "chatBubble")
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
+        
+        return imageView
+    }()
+    
     let inputContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
@@ -78,15 +87,24 @@ class LoginViewController: UIViewController {
 
         view.backgroundColor = UIColor(r: 61, g: 91, b: 151)
         
+        view.addSubview(profileImageView)
         view.addSubview(inputContainerView)
         view.addSubview(registerButton)
         
+        setupProfileImageView()
         setupInputsContainerView()
         setupRegisterButton()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
+    }
+    
+    func setupProfileImageView() {
+        profileImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        profileImageView.bottomAnchor.constraint(equalTo: inputContainerView.topAnchor, constant: -12).isActive = true
+        profileImageView.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        profileImageView.heightAnchor.constraint(equalToConstant: 150).isActive = true
     }
     
     func setupInputsContainerView() {
