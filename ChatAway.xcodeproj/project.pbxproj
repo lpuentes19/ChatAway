@@ -13,6 +13,8 @@
 		9523056D1FA7F5F20064A4BC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9523056B1FA7F5F20064A4BC /* LaunchScreen.storyboard */; };
 		952305761FA7F7AF0064A4BC /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952305751FA7F7AF0064A4BC /* LoginViewController.swift */; };
 		952305791FA7F7FF0064A4BC /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952305781FA7F7FF0064A4BC /* UIColor+Extension.swift */; };
+		9523057C1FA82EE30064A4BC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9523057B1FA82EE30064A4BC /* GoogleService-Info.plist */; };
+		CDF5D0C05F22584DC5920105 /* Pods_ChatAway.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACF96BD5613173CF3172B521 /* Pods_ChatAway.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,10 @@
 		9523056E1FA7F5F20064A4BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		952305751FA7F7AF0064A4BC /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		952305781FA7F7FF0064A4BC /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
+		9523057B1FA82EE30064A4BC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		A80E802C832F8263F1C0283E /* Pods-ChatAway.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatAway.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatAway/Pods-ChatAway.debug.xcconfig"; sourceTree = "<group>"; };
+		ACF96BD5613173CF3172B521 /* Pods_ChatAway.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChatAway.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CA389877CC6FA28CA3E6BAB1 /* Pods-ChatAway.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatAway.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChatAway/Pods-ChatAway.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,17 +37,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CDF5D0C05F22584DC5920105 /* Pods_ChatAway.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1C67ADF9D5CADDE97EB6F734 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				A80E802C832F8263F1C0283E /* Pods-ChatAway.debug.xcconfig */,
+				CA389877CC6FA28CA3E6BAB1 /* Pods-ChatAway.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		4DB11434A80AA489A5FAD956 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				ACF96BD5613173CF3172B521 /* Pods_ChatAway.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		952305561FA7F5F20064A4BC = {
 			isa = PBXGroup;
 			children = (
 				952305611FA7F5F20064A4BC /* ChatAway */,
 				952305601FA7F5F20064A4BC /* Products */,
+				1C67ADF9D5CADDE97EB6F734 /* Pods */,
+				4DB11434A80AA489A5FAD956 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -70,6 +96,7 @@
 				952305621FA7F5F20064A4BC /* AppDelegate.swift */,
 				952305691FA7F5F20064A4BC /* Assets.xcassets */,
 				9523056B1FA7F5F20064A4BC /* LaunchScreen.storyboard */,
+				9523057B1FA82EE30064A4BC /* GoogleService-Info.plist */,
 				9523056E1FA7F5F20064A4BC /* Info.plist */,
 			);
 			path = Resources;
@@ -98,9 +125,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 952305711FA7F5F20064A4BC /* Build configuration list for PBXNativeTarget "ChatAway" */;
 			buildPhases = (
+				3331184F3335275D4D4E4256 /* [CP] Check Pods Manifest.lock */,
 				9523055B1FA7F5F20064A4BC /* Sources */,
 				9523055C1FA7F5F20064A4BC /* Frameworks */,
 				9523055D1FA7F5F20064A4BC /* Resources */,
+				58035B67EF6F6770B995157B /* [CP] Embed Pods Frameworks */,
+				661BAA37B7953952C587CC3F /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -153,10 +183,59 @@
 				9523056D1FA7F5F20064A4BC /* LaunchScreen.storyboard in Resources */,
 				9523056A1FA7F5F20064A4BC /* Assets.xcassets in Resources */,
 				952305681FA7F5F20064A4BC /* Main.storyboard in Resources */,
+				9523057C1FA82EE30064A4BC /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3331184F3335275D4D4E4256 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		58035B67EF6F6770B995157B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ChatAway/Pods-ChatAway-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		661BAA37B7953952C587CC3F /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ChatAway/Pods-ChatAway-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		9523055B1FA7F5F20064A4BC /* Sources */ = {
@@ -300,6 +379,7 @@
 		};
 		952305721FA7F5F20064A4BC /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A80E802C832F8263F1C0283E /* Pods-ChatAway.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -315,6 +395,7 @@
 		};
 		952305731FA7F5F20064A4BC /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CA389877CC6FA28CA3E6BAB1 /* Pods-ChatAway.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
