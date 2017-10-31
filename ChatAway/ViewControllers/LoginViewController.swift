@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import FirebaseAuth
+import FirebaseDatabase
 
 class LoginViewController: UIViewController {
 
@@ -29,7 +31,7 @@ class LoginViewController: UIViewController {
         return view
     }()
     
-    let registerButton: UIButton = {
+    var registerButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = UIColor(r: 80, g: 101, b: 161)
         button.setTitle("Register", for: .normal)
@@ -38,6 +40,7 @@ class LoginViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 5
         button.layer.masksToBounds = true
+        button.addTarget(self, action: #selector(registerButtonTapped), for: .touchUpInside)
         
         return button
     }()
@@ -98,6 +101,28 @@ class LoginViewController: UIViewController {
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
+    }
+    
+    @objc func registerButtonTapped() {
+        guard let name = nameTextField.text, let email = emailTextField.text, let password = passwordTextField.text else { return }
+        
+        Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
+            if error != nil {
+                print(error!.localizedDescription)
+                return
+            }
+            
+            guard let uid = user?.uid else { return }
+            
+            let ref = Database.database().reference().child("Users").child(uid)
+            let values = ["Name": name, "Email": email]
+            ref.updateChildValues(values, withCompletionBlock: { (err, ref) in
+                if err != nil {
+                    print(err!.localizedDescription)
+                    return
+                }
+            })
+        }
     }
     
     func setupProfileImageView() {
