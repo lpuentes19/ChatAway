@@ -159,7 +159,7 @@ class LoginViewController: UIViewController {
             guard let uid = user?.uid else { return }
             
             let ref = Database.database().reference().child("Users").child(uid)
-            let values = ["Name": name, "Email": email]
+            let values = ["name": name, "email": email]
             ref.updateChildValues(values, withCompletionBlock: { (err, ref) in
                 if err != nil {
                     print(err!.localizedDescription)

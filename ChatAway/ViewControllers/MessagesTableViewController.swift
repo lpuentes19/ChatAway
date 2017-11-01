@@ -30,7 +30,7 @@ class MessagesTableViewController: UITableViewController {
             let uid = Auth.auth().currentUser?.uid
             Database.database().reference().child("Users").child(uid!).observeSingleEvent(of: .value, with: { (snapshot) in
                 if let dict = snapshot.value as? [String: Any] {
-                    self.navigationItem.title = dict["Name"] as? String
+                    self.navigationItem.title = dict["name"] as? String
                 }
             })
         }

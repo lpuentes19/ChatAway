@@ -16,6 +16,8 @@
 		9523057C1FA82EE30064A4BC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9523057B1FA82EE30064A4BC /* GoogleService-Info.plist */; };
 		953099ED1FAA4DAD00BF6E5F /* MessagesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 953099EC1FAA4DAD00BF6E5F /* MessagesTableViewController.swift */; };
 		953099EF1FAA5A9500BF6E5F /* NewMessageTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 953099EE1FAA5A9500BF6E5F /* NewMessageTableViewController.swift */; };
+		953099F11FAA5DDD00BF6E5F /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 953099F01FAA5DDD00BF6E5F /* UserModel.swift */; };
+		953099F41FAA700300BF6E5F /* UserDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 953099F31FAA700300BF6E5F /* UserDetailTableViewCell.swift */; };
 		CDF5D0C05F22584DC5920105 /* Pods_ChatAway.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACF96BD5613173CF3172B521 /* Pods_ChatAway.framework */; };
 /* End PBXBuildFile section */
 
@@ -31,6 +33,8 @@
 		9523057B1FA82EE30064A4BC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		953099EC1FAA4DAD00BF6E5F /* MessagesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesTableViewController.swift; sourceTree = "<group>"; };
 		953099EE1FAA5A9500BF6E5F /* NewMessageTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMessageTableViewController.swift; sourceTree = "<group>"; };
+		953099F01FAA5DDD00BF6E5F /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
+		953099F31FAA700300BF6E5F /* UserDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailTableViewCell.swift; sourceTree = "<group>"; };
 		A80E802C832F8263F1C0283E /* Pods-ChatAway.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatAway.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatAway/Pods-ChatAway.debug.xcconfig"; sourceTree = "<group>"; };
 		ACF96BD5613173CF3172B521 /* Pods_ChatAway.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChatAway.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA389877CC6FA28CA3E6BAB1 /* Pods-ChatAway.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatAway.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChatAway/Pods-ChatAway.release.xcconfig"; sourceTree = "<group>"; };
@@ -87,6 +91,8 @@
 			isa = PBXGroup;
 			children = (
 				9523057A1FA7F8040064A4BC /* Extensions */,
+				953099F51FAA701600BF6E5F /* Views */,
+				953099F21FAA5E3500BF6E5F /* Models */,
 				952305771FA7F7B60064A4BC /* ViewControllers */,
 				952305741FA7F6190064A4BC /* Resources */,
 			);
@@ -122,6 +128,22 @@
 				952305781FA7F7FF0064A4BC /* UIColor+Extension.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		953099F21FAA5E3500BF6E5F /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				953099F01FAA5DDD00BF6E5F /* UserModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		953099F51FAA701600BF6E5F /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				953099F31FAA700300BF6E5F /* UserDetailTableViewCell.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -250,6 +272,8 @@
 			files = (
 				952305791FA7F7FF0064A4BC /* UIColor+Extension.swift in Sources */,
 				952305761FA7F7AF0064A4BC /* LoginViewController.swift in Sources */,
+				953099F11FAA5DDD00BF6E5F /* UserModel.swift in Sources */,
+				953099F41FAA700300BF6E5F /* UserDetailTableViewCell.swift in Sources */,
 				953099ED1FAA4DAD00BF6E5F /* MessagesTableViewController.swift in Sources */,
 				952305631FA7F5F20064A4BC /* AppDelegate.swift in Sources */,
 				953099EF1FAA5A9500BF6E5F /* NewMessageTableViewController.swift in Sources */,
