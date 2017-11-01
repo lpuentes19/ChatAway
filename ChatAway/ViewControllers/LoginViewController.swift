@@ -40,7 +40,7 @@ class LoginViewController: UIViewController {
         return view
     }()
     
-    var registerButton: UIButton = {
+    var loginRegisterButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = UIColor(r: 80, g: 101, b: 161)
         button.setTitle("Register", for: .normal)
@@ -49,7 +49,7 @@ class LoginViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 5
         button.layer.masksToBounds = true
-        button.addTarget(self, action: #selector(registerButtonTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(handleLoginRegisterButtonTapped), for: .touchUpInside)
         
         return button
     }()
@@ -88,6 +88,7 @@ class LoginViewController: UIViewController {
     
     let passwordTextField: UITextField = {
         let textField = UITextField()
+        textField.isSecureTextEntry = true
         textField.placeholder = "Password"
         textField.translatesAutoresizingMaskIntoConstraints = false
         
@@ -102,7 +103,7 @@ class LoginViewController: UIViewController {
         view.addSubview(profileImageView)
         view.addSubview(loginRegesterSegmentedControl)
         view.addSubview(inputContainerView)
-        view.addSubview(registerButton)
+        view.addSubview(loginRegisterButton)
         
         setupProfileImageView()
         setupLoginRegisterSegmentedControl()
@@ -117,7 +118,7 @@ class LoginViewController: UIViewController {
     @objc func handleLoginRegisterChange() {
         // Change title of Register/Login Button depending on the selectedSegment
         let title = loginRegesterSegmentedControl.titleForSegment(at: loginRegesterSegmentedControl.selectedSegmentIndex)
-        registerButton.setTitle(title, for: .normal)
+        loginRegisterButton.setTitle(title, for: .normal)
         
         // Changing the size of the inputsContainerView depending on the selectedSegment
         inputsContainerViewHeightAnchor?.constant = loginRegesterSegmentedControl.selectedSegmentIndex == 0 ? 100 : 150
@@ -138,7 +139,15 @@ class LoginViewController: UIViewController {
         passwordTextFieldHeightAnchor?.isActive = true
     }
     
-    @objc func registerButtonTapped() {
+    @objc func handleLoginRegisterButtonTapped() {
+        if loginRegesterSegmentedControl.selectedSegmentIndex == 0 {
+            loginButtonTapped()
+        } else {
+            registerButtonTapped()
+        }
+    }
+    
+    func registerButtonTapped() {
         guard let name = nameTextField.text, let email = emailTextField.text, let password = passwordTextField.text else { return }
         
         Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
@@ -157,6 +166,20 @@ class LoginViewController: UIViewController {
                     return
                 }
             })
+        }
+    }
+    
+    func loginButtonTapped() {
+        guard let email = emailTextField.text, let password = passwordTextField.text else { return }
+        
+        Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
+            if error != nil {
+                print(error!.localizedDescription)
+                return
+            }
+            let contactsVC = ContactsTableViewController()
+            let navController = UINavigationController(rootViewController: contactsVC)
+            self.present(navController, animated: true, completion: nil)
         }
     }
     
@@ -231,9 +254,9 @@ class LoginViewController: UIViewController {
     
     func setupRegisterButton() {
         // Constraints for registerButton
-        registerButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        registerButton.topAnchor.constraint(equalTo: inputContainerView.bottomAnchor, constant: 12).isActive = true
-        registerButton.widthAnchor.constraint(equalTo: inputContainerView.widthAnchor).isActive = true
-        registerButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        loginRegisterButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        loginRegisterButton.topAnchor.constraint(equalTo: inputContainerView.bottomAnchor, constant: 12).isActive = true
+        loginRegisterButton.widthAnchor.constraint(equalTo: inputContainerView.widthAnchor).isActive = true
+        loginRegisterButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
 }
