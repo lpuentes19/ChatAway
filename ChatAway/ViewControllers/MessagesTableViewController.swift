@@ -10,16 +10,36 @@ import UIKit
 import FirebaseAuth
 import FirebaseDatabase
 
-class ContactsTableViewController: UITableViewController {
+class MessagesTableViewController: UITableViewController {
 
+    let image = UIImage(named: "newMessage")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogout))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(handleNewMessage))
         
+        checkIfUserIsLoggedIn()
+    }
+    
+    func checkIfUserIsLoggedIn() {
         if Auth.auth().currentUser?.uid == nil {
             handleLogout()
+        } else {
+            let uid = Auth.auth().currentUser?.uid
+            Database.database().reference().child("Users").child(uid!).observeSingleEvent(of: .value, with: { (snapshot) in
+                if let dict = snapshot.value as? [String: Any] {
+                    self.navigationItem.title = dict["Name"] as? String
+                }
+            })
         }
+    }
+    
+    @objc func handleNewMessage() {
+        let newMessageVC = NewMessageTableViewController()
+        let navbarVC = UINavigationController(rootViewController: newMessageVC)
+        present(navbarVC, animated: true, completion: nil)
     }
 
     @objc func handleLogout() {

@@ -177,7 +177,7 @@ class LoginViewController: UIViewController {
                 print(error!.localizedDescription)
                 return
             }
-            let contactsVC = ContactsTableViewController()
+            let contactsVC = MessagesTableViewController()
             let navController = UINavigationController(rootViewController: contactsVC)
             self.present(navController, animated: true, completion: nil)
         }
