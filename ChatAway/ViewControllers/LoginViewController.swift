@@ -9,14 +9,17 @@
 import UIKit
 import FirebaseAuth
 import FirebaseDatabase
+import FirebaseStorage
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
-    let profileImageView: UIImageView = {
+    lazy var profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "chatBubble")
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
+        imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectProfileImageView)))
+        imageView.isUserInteractionEnabled = true
         
         return imageView
     }()
@@ -115,6 +118,32 @@ class LoginViewController: UIViewController {
         return .lightContent
     }
     
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        
+        var selectedImageFromPicker: UIImage?
+        
+        if let editedImage = info["UIImagePickerControllerEditedImage"] as? UIImage {
+            selectedImageFromPicker = editedImage
+        } else if let originalImage = info["UIImagePickerControllerOriginalImage"] as? UIImage {
+            selectedImageFromPicker = originalImage
+        }
+        if let selectedImage = selectedImageFromPicker {
+            profileImageView.image = selectedImage
+        }
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func handleSelectProfileImageView() {
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.allowsEditing = true
+        present(picker, animated: true, completion: nil)
+    }
+    
     @objc func handleLoginRegisterChange() {
         // Change title of Register/Login Button depending on the selectedSegment
         let title = loginRegesterSegmentedControl.titleForSegment(at: loginRegesterSegmentedControl.selectedSegmentIndex)
@@ -158,14 +187,20 @@ class LoginViewController: UIViewController {
             
             guard let uid = user?.uid else { return }
             
-            let ref = Database.database().reference().child("Users").child(uid)
-            let values = ["name": name, "email": email]
-            ref.updateChildValues(values, withCompletionBlock: { (err, ref) in
-                if err != nil {
-                    print(err!.localizedDescription)
-                    return
-                }
-            })
+            let imageName = NSUUID().uuidString
+            let storageRef = Storage.storage().reference().child("\(imageName).png")
+            if let uploadData = UIImagePNGRepresentation(self.profileImageView.image!) {
+                storageRef.putData(uploadData, metadata: nil, completion: { (metadata, error) in
+                    if error != nil {
+                        print(error!.localizedDescription)
+                        return
+                    }
+                    if let profileImageURL = metadata?.downloadURL()?.absoluteString {
+                        let values = ["name": name, "email": email, "profileImageURL": profileImageURL]
+                        self.registerUserIntoDatabaseWithUID(uid: uid, values: values)
+                    }
+                })
+            }
         }
     }
     
@@ -181,6 +216,17 @@ class LoginViewController: UIViewController {
             let navController = UINavigationController(rootViewController: contactsVC)
             self.present(navController, animated: true, completion: nil)
         }
+    }
+    
+    private func registerUserIntoDatabaseWithUID(uid: String, values: [String: Any]) {
+        let ref = Database.database().reference(fromURL: "https://chataway-769aa.firebaseio.com/")
+        let userRef = ref.child("Users").child(uid)
+        userRef.updateChildValues(values, withCompletionBlock: { (err, ref) in
+            if err != nil {
+                print(err!.localizedDescription)
+                return
+            }
+        })
     }
     
     func setupProfileImageView() {
