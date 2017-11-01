@@ -161,6 +161,7 @@ class LoginViewController: UIViewController {
     }
     
     func setupProfileImageView() {
+        // Contraints for profileImageView
         profileImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         profileImageView.bottomAnchor.constraint(equalTo: loginRegesterSegmentedControl.topAnchor, constant: -12).isActive = true
         profileImageView.widthAnchor.constraint(equalToConstant: 150).isActive = true
@@ -168,12 +169,14 @@ class LoginViewController: UIViewController {
     }
     
     func setupLoginRegisterSegmentedControl() {
+        // Constraints for loginRegisterSegementedControl
         loginRegesterSegmentedControl.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         loginRegesterSegmentedControl.bottomAnchor.constraint(equalTo: inputContainerView.topAnchor, constant: -12).isActive = true
         loginRegesterSegmentedControl.widthAnchor.constraint(equalTo: inputContainerView.widthAnchor).isActive = true
         loginRegesterSegmentedControl.heightAnchor.constraint(equalToConstant: 30).isActive = true
     }
     
+    // References to the all objects height anchors
     var inputsContainerViewHeightAnchor: NSLayoutConstraint?
     var nameTextFieldHeightAnchor: NSLayoutConstraint?
     var emailTextFieldHeightAnchor: NSLayoutConstraint?
@@ -227,6 +230,7 @@ class LoginViewController: UIViewController {
     }
     
     func setupRegisterButton() {
+        // Constraints for registerButton
         registerButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         registerButton.topAnchor.constraint(equalTo: inputContainerView.bottomAnchor, constant: 12).isActive = true
         registerButton.widthAnchor.constraint(equalTo: inputContainerView.widthAnchor).isActive = true
