@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		95111B141FABCAEC00D8256B /* Cache+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95111B131FABCAEC00D8256B /* Cache+Extension.swift */; };
 		952305631FA7F5F20064A4BC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952305621FA7F5F20064A4BC /* AppDelegate.swift */; };
 		952305681FA7F5F20064A4BC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 952305661FA7F5F20064A4BC /* Main.storyboard */; };
 		9523056A1FA7F5F20064A4BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 952305691FA7F5F20064A4BC /* Assets.xcassets */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		95111B131FABCAEC00D8256B /* Cache+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Cache+Extension.swift"; sourceTree = "<group>"; };
 		9523055F1FA7F5F20064A4BC /* ChatAway.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatAway.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		952305621FA7F5F20064A4BC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		952305671FA7F5F20064A4BC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 			isa = PBXGroup;
 			children = (
 				952305781FA7F7FF0064A4BC /* UIColor+Extension.swift */,
+				95111B131FABCAEC00D8256B /* Cache+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -274,6 +277,7 @@
 				952305761FA7F7AF0064A4BC /* LoginViewController.swift in Sources */,
 				953099F11FAA5DDD00BF6E5F /* UserModel.swift in Sources */,
 				953099F41FAA700300BF6E5F /* UserDetailTableViewCell.swift in Sources */,
+				95111B141FABCAEC00D8256B /* Cache+Extension.swift in Sources */,
 				953099ED1FAA4DAD00BF6E5F /* MessagesTableViewController.swift in Sources */,
 				952305631FA7F5F20064A4BC /* AppDelegate.swift in Sources */,
 				953099EF1FAA5A9500BF6E5F /* NewMessageTableViewController.swift in Sources */,
