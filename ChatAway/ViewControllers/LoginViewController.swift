@@ -191,7 +191,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
             
             let imageName = NSUUID().uuidString
             let storageRef = Storage.storage().reference().child("\(imageName).png")
-            if let uploadData = UIImagePNGRepresentation(self.profileImageView.image!) {
+            if let profileImage = self.profileImageView.image, let uploadData = UIImageJPEGRepresentation(profileImage, 0.1) {
                 storageRef.putData(uploadData, metadata: nil, completion: { (metadata, error) in
                     if error != nil {
                         print(error!.localizedDescription)
@@ -229,7 +229,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                 print(err!.localizedDescription)
                 return
             }
-            self.messagesController?.navigationItem.title = values["name"] as? String 
+            self.messagesController?.navigationItem.title = values["name"] as? String
             self.dismiss(animated: true, completion: nil)
         })
     }
