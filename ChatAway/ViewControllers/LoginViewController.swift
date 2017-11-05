@@ -13,6 +13,8 @@ import FirebaseStorage
 
 class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
+    var messagesController: MessagesTableViewController?
+    
     lazy var profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "chatBubble")
@@ -212,6 +214,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                 print(error!.localizedDescription)
                 return
             }
+            self.messagesController?.fetchUserAndSetupNavBarTitle()
             let contactsVC = MessagesTableViewController()
             let navController = UINavigationController(rootViewController: contactsVC)
             self.present(navController, animated: true, completion: nil)
@@ -226,6 +229,8 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
                 print(err!.localizedDescription)
                 return
             }
+            self.messagesController?.navigationItem.title = values["name"] as? String 
+            self.dismiss(animated: true, completion: nil)
         })
     }
     
