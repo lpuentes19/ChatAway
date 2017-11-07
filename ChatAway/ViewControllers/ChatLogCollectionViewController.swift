@@ -11,6 +11,12 @@ import FirebaseDatabase
 
 class ChatLogCollectionViewController: UICollectionViewController {
 
+    var user: UserModel? {
+        didSet {
+            navigationItem.title = user?.name
+        }
+    }
+    
     let inputTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Enter message..."

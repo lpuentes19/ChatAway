@@ -15,6 +15,7 @@ class NewMessageTableViewController: UITableViewController {
 
     let cellID = "cellID"
     var users = [UserModel]()
+    var messagesController: MessagesTableViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,10 +70,10 @@ class NewMessageTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        dismiss(animated: true, completion: nil)
-        let chatLogVC = ChatLogCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
-        present(chatLogVC, animated: true, completion: nil)
-        
+        dismiss(animated: true) {
+            let user = self.users[indexPath.row]
+            self.messagesController?.showChatLogVCForUser(user: user)
+        }
     }
 }
 

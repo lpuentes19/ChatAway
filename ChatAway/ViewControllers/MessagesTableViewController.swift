@@ -42,6 +42,7 @@ class MessagesTableViewController: UITableViewController {
     
     @objc func handleNewMessage() {
         let newMessageVC = NewMessageTableViewController()
+        newMessageVC.messagesController = self
         let navbarVC = UINavigationController(rootViewController: newMessageVC)
         present(navbarVC, animated: true, completion: nil)
     }
@@ -57,6 +58,12 @@ class MessagesTableViewController: UITableViewController {
         let loginVC = LoginViewController()
         loginVC.messagesController = self
         present(loginVC, animated: true, completion: nil)
+    }
+    
+    func showChatLogVCForUser(user: UserModel) {
+        let chatController = ChatLogCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
+        chatController.user = user
+        navigationController?.pushViewController(chatController, animated: true)
     }
     
     // MARK: - Table view data source
