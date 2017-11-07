@@ -102,7 +102,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         view.backgroundColor = UIColor(r: 61, g: 91, b: 151)
         
         view.addSubview(profileImageView)

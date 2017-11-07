@@ -67,6 +67,13 @@ class NewMessageTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 72
     }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        dismiss(animated: true, completion: nil)
+        let chatLogVC = ChatLogCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
+        present(chatLogVC, animated: true, completion: nil)
+        
+    }
 }
 
 class UserCell: UITableViewCell {
