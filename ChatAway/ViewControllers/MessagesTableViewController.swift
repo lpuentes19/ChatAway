@@ -12,6 +12,7 @@ import FirebaseDatabase
 
 class MessagesTableViewController: UITableViewController {
 
+    var messages = [Message]()
     let image = UIImage(named: "newMessage")
     
     override func viewDidLoad() {
@@ -21,6 +22,7 @@ class MessagesTableViewController: UITableViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(handleNewMessage))
         
         checkIfUserIsLoggedIn()
+        observeMessages()
     }
     
     func checkIfUserIsLoggedIn() {
@@ -29,6 +31,22 @@ class MessagesTableViewController: UITableViewController {
         } else {
             fetchUserAndSetupNavBarTitle()
         }
+    }
+    
+    func observeMessages() {
+        let ref = Database.database().reference().child("Messages")
+        ref.observe(.childAdded, with: { (snapshot) in
+            if let dict = snapshot.value as? [String: Any] {
+                let message = Message()
+                message.toID = dict["toID"] as? String
+                message.fromID = dict["fromID"] as? String
+                message.text = dict["text"] as? String
+                message.timestamp = dict["timestamp"] as? Int
+                
+                self.messages.append(message)
+                self.tableView.reloadData()
+            }
+        }, withCancel: nil)
     }
     
     func fetchUserAndSetupNavBarTitle() {

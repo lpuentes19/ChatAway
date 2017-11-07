@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 import FirebaseDatabase
 
 class ChatLogCollectionViewController: UICollectionViewController {
@@ -78,7 +79,10 @@ class ChatLogCollectionViewController: UICollectionViewController {
         } else {
             let ref = Database.database().reference().child("Messages")
             let childRef = ref.childByAutoId()
-            let values = ["text": text]
+            let toID = user!.toID!
+            let fromID = Auth.auth().currentUser!.uid
+            let timestamp: Int = Int(NSDate().timeIntervalSince1970)
+            let values = ["text": text, "toID": toID, "fromID": fromID, "timestamp": timestamp] as [String : Any]
             childRef.updateChildValues(values)
         }
     }

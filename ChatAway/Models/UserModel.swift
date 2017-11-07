@@ -12,5 +12,6 @@ class UserModel {
     
     var name: String?
     var email: String?
+    var toID: String?
     var profileImageURL: String?
 }
