@@ -12,6 +12,7 @@ import FirebaseDatabase
 
 class MessagesTableViewController: UITableViewController {
 
+    let cellID = "cellID"
     var messages = [Message]()
     let image = UIImage(named: "newMessage")
     
@@ -20,6 +21,7 @@ class MessagesTableViewController: UITableViewController {
                 
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogout))
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(handleNewMessage))
+        tableView.register(UserDetailTableViewCell.self, forCellReuseIdentifier: cellID)
         
         checkIfUserIsLoggedIn()
         observeMessages()
@@ -92,7 +94,7 @@ class MessagesTableViewController: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as? UserDetailTableViewCell else { return UITableViewCell() }
 
         let message = messages[indexPath.row]
         
