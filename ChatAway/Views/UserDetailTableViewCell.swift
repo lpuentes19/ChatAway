@@ -7,9 +7,27 @@
 //
 
 import UIKit
+import FirebaseDatabase
 
 class UserDetailTableViewCell: UITableViewCell {
     
+    var message: Message? {
+        didSet {
+            if let toID = message?.toID {
+                let ref = Database.database().reference().child("Users").child(toID)
+                ref.observeSingleEvent(of: .value, with: { (snapshot) in
+                    if let dict = snapshot.value as? [String : Any] {
+                        self.textLabel?.text = dict["name"] as? String
+                        
+                        if let profileImageURL = dict["profileImageURL"] as? String {
+                            self.profileImageView.loadImageUsingCacheWith(urlString: profileImageURL)
+                        }
+                    }
+                })
+            }
+            detailTextLabel?.text = message?.text
+        }
+    }
     override func awakeFromNib() {
         super.awakeFromNib()
     }

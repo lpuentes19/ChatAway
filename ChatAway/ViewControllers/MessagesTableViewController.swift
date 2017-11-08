@@ -89,7 +89,7 @@ class MessagesTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        return messages.count
     }
 
     
@@ -97,25 +97,12 @@ class MessagesTableViewController: UITableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as? UserDetailTableViewCell else { return UITableViewCell() }
 
         let message = messages[indexPath.row]
+        cell.message = message
         
-        if let toID = message.toID {
-            let ref = Database.database().reference().child("Users").child(toID)
-            ref.observeSingleEvent(of: .value, with: { (snapshot) in
-                if let dict = snapshot.value as? [String : Any] {
-                    cell.textLabel?.text = dict["name"] as? String
-                }
-            })
-        }
         return cell
     }
     
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 72
     }
 }
