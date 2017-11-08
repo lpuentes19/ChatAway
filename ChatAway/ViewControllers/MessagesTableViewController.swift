@@ -92,8 +92,18 @@ class MessagesTableViewController: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath)
 
+        let message = messages[indexPath.row]
+        
+        if let toID = message.toID {
+            let ref = Database.database().reference().child("Users").child(toID)
+            ref.observeSingleEvent(of: .value, with: { (snapshot) in
+                if let dict = snapshot.value as? [String : Any] {
+                    cell.textLabel?.text = dict["name"] as? String
+                }
+            })
+        }
         return cell
     }
     

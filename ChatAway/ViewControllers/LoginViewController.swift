@@ -222,7 +222,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
     }
     
     private func registerUserIntoDatabaseWithUID(uid: String, values: [String: Any]) {
-        let ref = Database.database().reference(fromURL: "https://chataway-769aa.firebaseio.com/")
+        let ref = Database.database().reference()
         let userRef = ref.child("Users").child(uid)
         userRef.updateChildValues(values, withCompletionBlock: { (err, ref) in
             if err != nil {
