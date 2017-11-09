@@ -14,6 +14,7 @@ class MessagesTableViewController: UITableViewController {
 
     let cellID = "cellID"
     var messages = [Message]()
+    var messagesDictionary = [String: Message]()
     let image = UIImage(named: "newMessage")
     
     override func viewDidLoad() {
@@ -43,9 +44,17 @@ class MessagesTableViewController: UITableViewController {
                 message.toID = dict["toID"] as? String
                 message.fromID = dict["fromID"] as? String
                 message.text = dict["text"] as? String
-                message.timestamp = dict["timestamp"] as? Int
+                message.timestamp = dict["timestamp"] as? NSNumber
+
+                if let toID = message.toID {
+                    self.messagesDictionary[toID] = message
+                    self.messages = Array(self.messagesDictionary.values)
+                    
+//                    self.messages.sort(by: { (message1, message2) -> Bool in
+//                        return message1.timestamp?.intValue > message2.timestamp?.intValue
+//                    })
+                }
                 
-                self.messages.append(message)
                 self.tableView.reloadData()
             }
         }, withCancel: nil)
