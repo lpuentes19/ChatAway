@@ -97,9 +97,9 @@
 			isa = PBXGroup;
 			children = (
 				9523057A1FA7F8040064A4BC /* Extensions */,
-				953099F51FAA701600BF6E5F /* Views */,
-				953099F21FAA5E3500BF6E5F /* Models */,
-				952305771FA7F7B60064A4BC /* ViewControllers */,
+				953099F51FAA701600BF6E5F /* View */,
+				953099F21FAA5E3500BF6E5F /* Model */,
+				952305771FA7F7B60064A4BC /* Controller */,
 				952305741FA7F6190064A4BC /* Resources */,
 			);
 			path = ChatAway;
@@ -118,7 +118,7 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		952305771FA7F7B60064A4BC /* ViewControllers */ = {
+		952305771FA7F7B60064A4BC /* Controller */ = {
 			isa = PBXGroup;
 			children = (
 				952305751FA7F7AF0064A4BC /* LoginViewController.swift */,
@@ -126,7 +126,7 @@
 				953099EE1FAA5A9500BF6E5F /* NewMessageTableViewController.swift */,
 				95FD05AD1FB1296300AED858 /* ChatLogCollectionViewController.swift */,
 			);
-			path = ViewControllers;
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		9523057A1FA7F8040064A4BC /* Extensions */ = {
@@ -138,21 +138,21 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		953099F21FAA5E3500BF6E5F /* Models */ = {
+		953099F21FAA5E3500BF6E5F /* Model */ = {
 			isa = PBXGroup;
 			children = (
 				953099F01FAA5DDD00BF6E5F /* UserModel.swift */,
 				95E044891FB155C400ABDAC0 /* Message.swift */,
 			);
-			path = Models;
+			path = Model;
 			sourceTree = "<group>";
 		};
-		953099F51FAA701600BF6E5F /* Views */ = {
+		953099F51FAA701600BF6E5F /* View */ = {
 			isa = PBXGroup;
 			children = (
 				953099F31FAA700300BF6E5F /* UserDetailTableViewCell.swift */,
 			);
-			path = Views;
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
