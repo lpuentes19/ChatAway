@@ -25,7 +25,8 @@ class MessagesTableViewController: UITableViewController {
         tableView.register(UserDetailTableViewCell.self, forCellReuseIdentifier: cellID)
         
         checkIfUserIsLoggedIn()
-        observeMessages()
+//        observeMessages()
+        observeUserMessages()
     }
     
     func checkIfUserIsLoggedIn() {
@@ -34,6 +35,38 @@ class MessagesTableViewController: UITableViewController {
         } else {
             fetchUserAndSetupNavBarTitle()
         }
+    }
+    
+    func observeUserMessages() {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let ref = Database.database().reference().child("User-Messages").child(uid)
+        
+        ref.observe(.childAdded, with: { (snapshot) in
+            let messageID = snapshot.key
+            let messageRef = Database.database().reference().child("Messages").child(messageID)
+            
+            messageRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                if let dict = snapshot.value as? [String: Any] {
+                    let message = Message()
+                    message.toID = dict["toID"] as? String
+                    message.fromID = dict["fromID"] as? String
+                    message.text = dict["text"] as? String
+                    message.timestamp = dict["timestamp"] as? NSNumber
+                    
+                    if let toID = message.toID {
+                        self.messagesDictionary[toID] = message
+                        self.messages = Array(self.messagesDictionary.values)
+                        
+                        // Sorting messages by timestamp
+                        // self.messages.sort(by: { (message1, message2) -> Bool in
+                        //      return message1.timestamp?.intValue > message2.timestamp?.intValue
+                        // })
+                    }
+                    self.tableView.reloadData()
+                }
+            })
+        })
     }
     
     func observeMessages() {
@@ -50,6 +83,7 @@ class MessagesTableViewController: UITableViewController {
                     self.messagesDictionary[toID] = message
                     self.messages = Array(self.messagesDictionary.values)
                     
+                    // Sorting messages by timestamp
 //                    self.messages.sort(by: { (message1, message2) -> Bool in
 //                        return message1.timestamp?.intValue > message2.timestamp?.intValue
 //                    })

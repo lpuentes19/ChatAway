@@ -83,7 +83,18 @@ class ChatLogCollectionViewController: UICollectionViewController {
             let fromID = Auth.auth().currentUser!.uid
             let timestamp: Int = Int(NSDate().timeIntervalSince1970)
             let values = ["text": text, "toID": toID, "fromID": fromID, "timestamp": timestamp] as [String : Any]
-            childRef.updateChildValues(values)
+//            childRef.updateChildValues(values)
+            
+            childRef.updateChildValues(values, withCompletionBlock: { (error, ref) in
+                if error != nil {
+                    print(error!.localizedDescription)
+                    return
+                }
+                let userMessagesRef = Database.database().reference().child("User-Messages").child(fromID)
+                
+                let messageID = childRef.key
+                userMessagesRef.updateChildValues([messageID: 1])
+            })
         }
     }
 }
