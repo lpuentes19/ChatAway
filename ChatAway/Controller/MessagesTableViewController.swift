@@ -26,7 +26,6 @@ class MessagesTableViewController: UITableViewController {
         
         checkIfUserIsLoggedIn()
 //        observeMessages()
-        observeUserMessages()
     }
     
     func checkIfUserIsLoggedIn() {
@@ -99,6 +98,10 @@ class MessagesTableViewController: UITableViewController {
         Database.database().reference().child("Users").child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
             if let dict = snapshot.value as? [String: Any] {
                 self.navigationItem.title = dict["name"] as? String
+                self.messages.removeAll()
+                self.messagesDictionary.removeAll()
+                self.tableView.reloadData()
+                self.observeUserMessages()
             }
         })
     }

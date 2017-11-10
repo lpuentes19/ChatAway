@@ -7,24 +7,15 @@
 //
 
 import UIKit
+import FirebaseAuth
 import FirebaseDatabase
 
 class UserDetailTableViewCell: UITableViewCell {
     
     var message: Message? {
         didSet {
-            if let toID = message?.toID {
-                let ref = Database.database().reference().child("Users").child(toID)
-                ref.observeSingleEvent(of: .value, with: { (snapshot) in
-                    if let dict = snapshot.value as? [String : Any] {
-                        self.textLabel?.text = dict["name"] as? String
-                        
-                        if let profileImageURL = dict["profileImageURL"] as? String {
-                            self.profileImageView.loadImageUsingCacheWith(urlString: profileImageURL)
-                        }
-                    }
-                })
-            }
+            setupNameAndProfileImage()
+            
             detailTextLabel?.text = message?.text
             
             if let seconds = message?.timestamp?.doubleValue {
@@ -57,6 +48,29 @@ class UserDetailTableViewCell: UITableViewCell {
         
         return label
     }()
+    
+    private func setupNameAndProfileImage() {
+        let chatPartnerID: String?
+        
+        if message?.fromID == Auth.auth().currentUser?.uid {
+            chatPartnerID = message?.toID
+        } else {
+            chatPartnerID = message?.fromID
+        }
+        
+        if let id = chatPartnerID {
+            let ref = Database.database().reference().child("Users").child(id)
+            ref.observeSingleEvent(of: .value, with: { (snapshot) in
+                if let dict = snapshot.value as? [String : Any] {
+                    self.textLabel?.text = dict["name"] as? String
+                    
+                    if let profileImageURL = dict["profileImageURL"] as? String {
+                        self.profileImageView.loadImageUsingCacheWith(urlString: profileImageURL)
+                    }
+                }
+            })
+        }
+    }
     
     override func layoutSubviews() {
         super.layoutSubviews()
