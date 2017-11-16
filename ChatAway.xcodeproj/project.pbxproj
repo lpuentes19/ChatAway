@@ -15,6 +15,7 @@
 		952305761FA7F7AF0064A4BC /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952305751FA7F7AF0064A4BC /* LoginViewController.swift */; };
 		952305791FA7F7FF0064A4BC /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952305781FA7F7FF0064A4BC /* UIColor+Extension.swift */; };
 		9523057C1FA82EE30064A4BC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9523057B1FA82EE30064A4BC /* GoogleService-Info.plist */; };
+		952402F11FBD1CAE00205F80 /* ChatLogCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952402F01FBD1CAE00205F80 /* ChatLogCollectionViewCell.swift */; };
 		953099ED1FAA4DAD00BF6E5F /* MessagesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 953099EC1FAA4DAD00BF6E5F /* MessagesTableViewController.swift */; };
 		953099EF1FAA5A9500BF6E5F /* NewMessageTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 953099EE1FAA5A9500BF6E5F /* NewMessageTableViewController.swift */; };
 		953099F11FAA5DDD00BF6E5F /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 953099F01FAA5DDD00BF6E5F /* UserModel.swift */; };
@@ -35,6 +36,7 @@
 		952305751FA7F7AF0064A4BC /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		952305781FA7F7FF0064A4BC /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		9523057B1FA82EE30064A4BC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		952402F01FBD1CAE00205F80 /* ChatLogCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLogCollectionViewCell.swift; sourceTree = "<group>"; };
 		953099EC1FAA4DAD00BF6E5F /* MessagesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesTableViewController.swift; sourceTree = "<group>"; };
 		953099EE1FAA5A9500BF6E5F /* NewMessageTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMessageTableViewController.swift; sourceTree = "<group>"; };
 		953099F01FAA5DDD00BF6E5F /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 			isa = PBXGroup;
 			children = (
 				953099F31FAA700300BF6E5F /* UserDetailTableViewCell.swift */,
+				952402F01FBD1CAE00205F80 /* ChatLogCollectionViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -280,6 +283,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				952305791FA7F7FF0064A4BC /* UIColor+Extension.swift in Sources */,
+				952402F11FBD1CAE00205F80 /* ChatLogCollectionViewCell.swift in Sources */,
 				952305761FA7F7AF0064A4BC /* LoginViewController.swift in Sources */,
 				953099F11FAA5DDD00BF6E5F /* UserModel.swift in Sources */,
 				953099F41FAA700300BF6E5F /* UserDetailTableViewCell.swift in Sources */,
