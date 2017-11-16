@@ -20,7 +20,6 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
     }
     
     var messages = [Message]()
-    
     let cellID = "cellID"
     
     let inputTextField: UITextField = {
@@ -33,7 +32,8 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView?.backgroundColor = .white
-        collectionView?.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellID)
+        collectionView?.alwaysBounceVertical = true
+        collectionView?.register(ChatLogCollectionViewCell.self, forCellWithReuseIdentifier: cellID)
         setupInputComponents()
     }
     
@@ -42,15 +42,16 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath)
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as? ChatLogCollectionViewCell else { return UICollectionViewCell() }
         
-        cell.backgroundColor = .blue
+        let message = messages[indexPath.item]
+        cell.textView.text = message.text
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.height, height: 80)
+        return CGSize(width: view.frame.width, height: 80)
     }
     
     func observeMessages() {
@@ -67,8 +68,12 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
                 message.text = dict["text"] as? String
                 message.timestamp = dict["timestamp"] as? NSNumber
                 
-                self.messages.append(message)
-                self.collectionView?.reloadData()
+                if message.chatPartnerID() == self.user?.id {
+                    self.messages.append(message)
+                    DispatchQueue.main.async {
+                        self.collectionView?.reloadData()
+                    }
+                }
             })
         })
     }
