@@ -50,15 +50,7 @@ class UserDetailTableViewCell: UITableViewCell {
     }()
     
     private func setupNameAndProfileImage() {
-        let chatPartnerID: String?
-        
-        if message?.fromID == Auth.auth().currentUser?.uid {
-            chatPartnerID = message?.toID
-        } else {
-            chatPartnerID = message?.fromID
-        }
-        
-        if let id = chatPartnerID {
+        if let id = message?.chatPartnerID() {
             let ref = Database.database().reference().child("Users").child(id)
             ref.observeSingleEvent(of: .value, with: { (snapshot) in
                 if let dict = snapshot.value as? [String : Any] {

@@ -37,7 +37,7 @@ class NewMessageTableViewController: UITableViewController {
 
                 user.name = dict["name"] as? String
                 user.email = dict["email"] as? String
-                user.toID = snapshot.key
+                user.id = snapshot.key
                 user.profileImageURL = dict["profileImageURL"] as? String
 
                 self.users.append(user)

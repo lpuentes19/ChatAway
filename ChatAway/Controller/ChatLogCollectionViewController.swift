@@ -10,13 +10,18 @@ import UIKit
 import FirebaseAuth
 import FirebaseDatabase
 
-class ChatLogCollectionViewController: UICollectionViewController {
+class ChatLogCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
 
     var user: UserModel? {
         didSet {
             navigationItem.title = user?.name
+            observeMessages()
         }
     }
+    
+    var messages = [Message]()
+    
+    let cellID = "cellID"
     
     let inputTextField: UITextField = {
         let textField = UITextField()
@@ -28,11 +33,49 @@ class ChatLogCollectionViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView?.backgroundColor = .white
+        collectionView?.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellID)
         setupInputComponents()
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return messages.count
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath)
+        
+        cell.backgroundColor = .blue
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: view.frame.height, height: 80)
+    }
+    
+    func observeMessages() {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let ref = Database.database().reference().child("User-Messages").child(uid)
+        ref.observe(.childAdded, with: { (snapshot) in
+            let messageID = snapshot.key
+            let messagesRef = Database.database().reference().child("Messages").child(messageID)
+            messagesRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                guard let dict = snapshot.value as? [String: Any] else { return }
+                let message = Message()
+                message.toID = dict["toID"] as? String
+                message.fromID = dict["fromID"] as? String
+                message.text = dict["text"] as? String
+                message.timestamp = dict["timestamp"] as? NSNumber
+                
+                self.messages.append(message)
+                self.collectionView?.reloadData()
+            })
+        })
     }
     
     func setupInputComponents() {
         let containerView = UIView()
+        containerView.backgroundColor = .white
         containerView.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(containerView)
@@ -79,11 +122,10 @@ class ChatLogCollectionViewController: UICollectionViewController {
         } else {
             let ref = Database.database().reference().child("Messages")
             let childRef = ref.childByAutoId()
-            let toID = user!.toID!
+            let toID = user!.id!
             let fromID = Auth.auth().currentUser!.uid
             let timestamp: Int = Int(NSDate().timeIntervalSince1970)
             let values = ["text": text, "toID": toID, "fromID": fromID, "timestamp": timestamp] as [String : Any]
-//            childRef.updateChildValues(values)
             
             childRef.updateChildValues(values, withCompletionBlock: { (error, ref) in
                 if error != nil {
