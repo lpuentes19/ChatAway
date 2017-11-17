@@ -55,6 +55,7 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
         
         if let text = messages[indexPath.item].text {
             height = estimateFrameForText(text: text).height + 20
+            print(text)
         }
         
         return CGSize(width: view.frame.width, height: height)

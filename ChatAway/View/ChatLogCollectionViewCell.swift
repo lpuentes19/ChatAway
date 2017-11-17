@@ -29,15 +29,15 @@ class ChatLogCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        addSubview(textView)
         addSubview(bubbleView)
+        addSubview(textView)
         
         // TextView Constraints
         textView.rightAnchor.constraint(equalTo: bubbleView.rightAnchor).isActive = true
         textView.leftAnchor.constraint(equalTo: bubbleView.leftAnchor, constant: 8).isActive = true
         textView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         textView.heightAnchor.constraint(equalTo: self.heightAnchor).isActive = true
-        //        textView.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        // textView.widthAnchor.constraint(equalToConstant: 200).isActive = true
         
         // BubbleView Constraints
         bubbleView.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
