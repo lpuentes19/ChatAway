@@ -53,8 +53,8 @@ class MessagesTableViewController: UITableViewController {
                     message.text = dict["text"] as? String
                     message.timestamp = dict["timestamp"] as? NSNumber
                     
-                    if let toID = message.toID {
-                        self.messagesDictionary[toID] = message
+                    if let chatPartnerID = message.chatPartnerID() {
+                        self.messagesDictionary[chatPartnerID] = message
                         self.messages = Array(self.messagesDictionary.values)
                         
                         // Sorting messages by timestamp

@@ -31,10 +31,19 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // The line of code below provides a cushion for the cell from the very top and bottom of the superview
+        collectionView?.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 58, right: 0)
+        collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
+        
         collectionView?.backgroundColor = .white
         collectionView?.alwaysBounceVertical = true
         collectionView?.register(ChatLogCollectionViewCell.self, forCellWithReuseIdentifier: cellID)
         setupInputComponents()
+    }
+    
+    // This method below will re-render the layout when in landscape mode
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        collectionView?.collectionViewLayout.invalidateLayout()
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -47,6 +56,8 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
         let message = messages[indexPath.item]
         cell.textView.text = message.text
         
+        cell.bubbleWidthAnchor?.constant = estimateFrameForText(text: message.text!).width + 32
+        
         return cell
     }
     
@@ -55,7 +66,6 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
         
         if let text = messages[indexPath.item].text {
             height = estimateFrameForText(text: text).height + 20
-            print(text)
         }
         
         return CGSize(width: view.frame.width, height: height)
@@ -151,6 +161,9 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
                     print(error!.localizedDescription)
                     return
                 }
+                
+                self.inputTextField.text = nil
+                
                 let userMessagesRef = Database.database().reference().child("User-Messages").child(fromID)
                 
                 let messageID = childRef.key

@@ -10,6 +10,8 @@ import UIKit
 
 class ChatLogCollectionViewCell: UICollectionViewCell {
     
+    var bubbleWidthAnchor: NSLayoutConstraint?
+    
     let textView: UITextView = {
         let text = UITextView()
         text.font = UIFont.systemFont(ofSize: 16)
@@ -22,6 +24,8 @@ class ChatLogCollectionViewCell: UICollectionViewCell {
     let bubbleView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(r: 0, g: 137, b: 249)
+        view.layer.cornerRadius = 16
+        view.layer.masksToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -32,18 +36,19 @@ class ChatLogCollectionViewCell: UICollectionViewCell {
         addSubview(bubbleView)
         addSubview(textView)
         
+        // BubbleView Constraints
+        bubbleView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -8).isActive = true
+        bubbleView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        bubbleWidthAnchor = bubbleView.widthAnchor.constraint(equalToConstant: 200)
+        bubbleWidthAnchor?.isActive = true
+        bubbleView.heightAnchor.constraint(equalTo: self.heightAnchor).isActive = true
+        
         // TextView Constraints
         textView.rightAnchor.constraint(equalTo: bubbleView.rightAnchor).isActive = true
         textView.leftAnchor.constraint(equalTo: bubbleView.leftAnchor, constant: 8).isActive = true
         textView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         textView.heightAnchor.constraint(equalTo: self.heightAnchor).isActive = true
         // textView.widthAnchor.constraint(equalToConstant: 200).isActive = true
-        
-        // BubbleView Constraints
-        bubbleView.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
-        bubbleView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        bubbleView.widthAnchor.constraint(equalToConstant: 200).isActive = true
-        bubbleView.heightAnchor.constraint(equalTo: self.heightAnchor).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {
