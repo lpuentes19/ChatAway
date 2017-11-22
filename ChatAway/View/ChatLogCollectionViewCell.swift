@@ -11,6 +11,8 @@ import UIKit
 class ChatLogCollectionViewCell: UICollectionViewCell {
     
     var bubbleWidthAnchor: NSLayoutConstraint?
+    var bubbleViewRightAnchor: NSLayoutConstraint?
+    var bubbleViewLeftAnchor: NSLayoutConstraint?
     static let blueColor = UIColor(r: 0, g: 137, b: 249)
     
     let textView: UITextView = {
@@ -31,18 +33,31 @@ class ChatLogCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
+    let profileImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.layer.cornerRadius = 16
+        imageView.layer.masksToBounds = true
+        imageView.contentMode = .scaleAspectFill
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         addSubview(bubbleView)
         addSubview(textView)
+        addSubview(profileImageView)
         
         // BubbleView Constraints
-        bubbleView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -8).isActive = true
-        bubbleView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        bubbleViewRightAnchor = bubbleView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -8)
+        bubbleViewRightAnchor?.isActive = true
+        bubbleViewLeftAnchor = bubbleView.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 8)
+        bubbleViewLeftAnchor?.isActive = false
         bubbleWidthAnchor = bubbleView.widthAnchor.constraint(equalToConstant: 200)
         bubbleWidthAnchor?.isActive = true
         bubbleView.heightAnchor.constraint(equalTo: self.heightAnchor).isActive = true
+        bubbleView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         
         // TextView Constraints
         textView.rightAnchor.constraint(equalTo: bubbleView.rightAnchor).isActive = true
@@ -50,6 +65,12 @@ class ChatLogCollectionViewCell: UICollectionViewCell {
         textView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         textView.heightAnchor.constraint(equalTo: self.heightAnchor).isActive = true
         // textView.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        
+        // ProfileImageView Constraints
+        profileImageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8).isActive = true
+        profileImageView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+        profileImageView.widthAnchor.constraint(equalToConstant: 32).isActive = true
+        profileImageView.heightAnchor.constraint(equalToConstant: 32).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {

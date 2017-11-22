@@ -74,14 +74,26 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
     }
     
     private func setupCell(cell: ChatLogCollectionViewCell, message: Message) {
+        if let profileImageURL = self.user?.profileImageURL {
+            cell.profileImageView.loadImageUsingCacheWith(urlString: profileImageURL)
+        }
+        
         if message.fromID == Auth.auth().currentUser?.uid {
             //Outgoing Blue
             cell.bubbleView.backgroundColor = ChatLogCollectionViewCell.blueColor
             cell.textView.textColor = .white
+            cell.profileImageView.isHidden = true
+            
+            cell.bubbleViewRightAnchor?.isActive = true
+            cell.bubbleViewLeftAnchor?.isActive = false
         } else {
             //Incoming Gray
             cell.bubbleView.backgroundColor = UIColor(r: 240, g: 240, b: 240)
             cell.textView.textColor = .black
+            cell.profileImageView.isHidden = false
+            
+            cell.bubbleViewRightAnchor?.isActive = false
+            cell.bubbleViewLeftAnchor?.isActive = true
         }
     }
     
