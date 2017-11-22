@@ -16,6 +16,7 @@ class MessagesTableViewController: UITableViewController {
     var messages = [Message]()
     var messagesDictionary = [String: Message]()
     let image = UIImage(named: "newMessage")
+    var timer: Timer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,7 +26,6 @@ class MessagesTableViewController: UITableViewController {
         tableView.register(UserDetailTableViewCell.self, forCellReuseIdentifier: cellID)
         
         checkIfUserIsLoggedIn()
-//        observeMessages()
     }
     
     func checkIfUserIsLoggedIn() {
@@ -62,35 +62,16 @@ class MessagesTableViewController: UITableViewController {
                         //      return message1.timestamp?.intValue > message2.timestamp?.intValue
                         // })
                     }
+                    self.timer?.invalidate()
+                    self.timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
                     self.tableView.reloadData()
                 }
             })
         })
     }
     
-    func observeMessages() {
-        let ref = Database.database().reference().child("Messages")
-        ref.observe(.childAdded, with: { (snapshot) in
-            if let dict = snapshot.value as? [String: Any] {
-                let message = Message()
-                message.toID = dict["toID"] as? String
-                message.fromID = dict["fromID"] as? String
-                message.text = dict["text"] as? String
-                message.timestamp = dict["timestamp"] as? NSNumber
-
-                if let toID = message.toID {
-                    self.messagesDictionary[toID] = message
-                    self.messages = Array(self.messagesDictionary.values)
-                    
-                    // Sorting messages by timestamp
-//                    self.messages.sort(by: { (message1, message2) -> Bool in
-//                        return message1.timestamp?.intValue > message2.timestamp?.intValue
-//                    })
-                }
-                
-                self.tableView.reloadData()
-            }
-        }, withCancel: nil)
+    @objc func handleReloadTable() {
+        tableView.reloadData()
     }
     
     func fetchUserAndSetupNavBarTitle() {

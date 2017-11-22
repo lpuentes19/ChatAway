@@ -36,7 +36,6 @@ class UserDetailTableViewCell: UITableViewCell {
         imageView.layer.cornerRadius = 24
         imageView.layer.masksToBounds = true
         imageView.contentMode = .scaleAspectFill
-        
         return imageView
     }()
     
@@ -45,7 +44,6 @@ class UserDetailTableViewCell: UITableViewCell {
         label.font = UIFont.systemFont(ofSize: 13)
         label.textColor = .darkGray
         label.translatesAutoresizingMaskIntoConstraints = false
-        
         return label
     }()
     
