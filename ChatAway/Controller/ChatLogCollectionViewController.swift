@@ -56,6 +56,8 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
         let message = messages[indexPath.item]
         cell.textView.text = message.text
         
+        setupCell(cell: cell, message: message)
+        
         cell.bubbleWidthAnchor?.constant = estimateFrameForText(text: message.text!).width + 32
         
         return cell
@@ -69,6 +71,18 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
         }
         
         return CGSize(width: view.frame.width, height: height)
+    }
+    
+    private func setupCell(cell: ChatLogCollectionViewCell, message: Message) {
+        if message.fromID == Auth.auth().currentUser?.uid {
+            //Outgoing Blue
+            cell.bubbleView.backgroundColor = ChatLogCollectionViewCell.blueColor
+            cell.textView.textColor = .white
+        } else {
+            //Incoming Gray
+            cell.bubbleView.backgroundColor = UIColor(r: 240, g: 240, b: 240)
+            cell.textView.textColor = .black
+        }
     }
     
     private func estimateFrameForText(text: String) -> CGRect {
