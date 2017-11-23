@@ -41,6 +41,7 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
         collectionView?.backgroundColor = .white
         collectionView?.alwaysBounceVertical = true
         collectionView?.register(ChatLogCollectionViewCell.self, forCellWithReuseIdentifier: cellID)
+        collectionView?.keyboardDismissMode = .interactive
         
         setupInputComponents()
         setupKeyboardObservers()
