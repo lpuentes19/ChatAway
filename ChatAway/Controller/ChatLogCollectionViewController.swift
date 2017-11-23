@@ -20,7 +20,10 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
     }
     
     var messages = [Message]()
+    
     let cellID = "cellID"
+    
+    var containerViewBottomAnchor: NSLayoutConstraint?
     
     let inputTextField: UITextField = {
         let textField = UITextField()
@@ -38,7 +41,15 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
         collectionView?.backgroundColor = .white
         collectionView?.alwaysBounceVertical = true
         collectionView?.register(ChatLogCollectionViewCell.self, forCellWithReuseIdentifier: cellID)
+        
         setupInputComponents()
+        setupKeyboardObservers()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        // Removing the Notification Observers to avoid any potential memory leaks
+        NotificationCenter.default.removeObserver(self)
     }
     
     // This method below will re-render the layout when in landscape mode
@@ -71,6 +82,30 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
         }
         
         return CGSize(width: view.frame.width, height: height)
+    }
+    
+    func setupKeyboardObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    @objc func handleKeyboardWillShow(notification: Notification) {
+        let keyboardFrame = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+        let keyboardDuration = (notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue
+        
+        containerViewBottomAnchor?.constant = -keyboardFrame!.height
+        UIView.animate(withDuration: keyboardDuration!) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    @objc func handleKeyboardWillHide(notification: Notification) {
+        let keyboardDuration = (notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue
+
+        containerViewBottomAnchor?.constant = 0
+        UIView.animate(withDuration: keyboardDuration!) {
+            self.view.layoutIfNeeded()
+        }
     }
     
     private func setupCell(cell: ChatLogCollectionViewCell, message: Message) {
@@ -136,6 +171,8 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
         view.addSubview(containerView)
         
         containerView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        containerViewBottomAnchor = containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        containerViewBottomAnchor?.isActive = true
         containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         containerView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         containerView.heightAnchor.constraint(equalToConstant: 50).isActive = true
