@@ -15,6 +15,7 @@ class Message {
     var fromID: String?
     var text: String?
     var timestamp: NSNumber?
+    var imageURL: String?
     
     func chatPartnerID() -> String? {
         if fromID == Auth.auth().currentUser?.uid {

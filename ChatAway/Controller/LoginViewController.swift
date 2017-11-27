@@ -190,7 +190,7 @@ class LoginViewController: UIViewController, UIImagePickerControllerDelegate, UI
             guard let uid = user?.uid else { return }
             
             let imageName = NSUUID().uuidString
-            let storageRef = Storage.storage().reference().child("\(imageName).png")
+            let storageRef = Storage.storage().reference().child("Profile Images").child("\(imageName).png")
             if let profileImage = self.profileImageView.image, let uploadData = UIImageJPEGRepresentation(profileImage, 0.1) {
                 storageRef.putData(uploadData, metadata: nil, completion: { (metadata, error) in
                     if error != nil {
