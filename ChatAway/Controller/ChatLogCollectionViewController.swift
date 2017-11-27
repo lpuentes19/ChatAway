@@ -201,11 +201,9 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
                 message.text = dict["text"] as? String
                 message.timestamp = dict["timestamp"] as? NSNumber
                 
-                if message.chatPartnerID() == self.user?.id {
-                    self.messages.append(message)
-                    DispatchQueue.main.async {
-                        self.collectionView?.reloadData()
-                    }
+                self.messages.append(message)
+                DispatchQueue.main.async {
+                    self.collectionView?.reloadData()
                 }
             })
         })
