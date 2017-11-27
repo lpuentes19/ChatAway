@@ -188,8 +188,8 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
     }
     
     func observeMessages() {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        let ref = Database.database().reference().child("User-Messages").child(uid)
+        guard let uid = Auth.auth().currentUser?.uid, let toID = user?.id else { return }
+        let ref = Database.database().reference().child("User-Messages").child(uid).child(toID)
         ref.observe(.childAdded, with: { (snapshot) in
             let messageID = snapshot.key
             let messagesRef = Database.database().reference().child("Messages").child(messageID)
@@ -275,12 +275,12 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
                 
                 self.inputTextField.text = nil
                 
-                let userMessagesRef = Database.database().reference().child("User-Messages").child(fromID)
+                let userMessagesRef = Database.database().reference().child("User-Messages").child(fromID).child(toID)
                 
                 let messageID = childRef.key
                 userMessagesRef.updateChildValues([messageID: 1])
                 
-                let recipientUserMessagesRef = Database.database().reference().child("User-Messages").child(toID)
+                let recipientUserMessagesRef = Database.database().reference().child("User-Messages").child(toID).child(fromID)
                 recipientUserMessagesRef.updateChildValues([messageID: 1])
             })
         }
