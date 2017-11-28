@@ -14,4 +14,11 @@ class UserModel {
     var email: String?
     var id: String?
     var profileImageURL: String?
+    
+    init(dictionary: [String: Any]) {
+        id = dictionary["id"] as? String
+        name = dictionary["name"] as? String
+        email = dictionary["email"] as? String
+        profileImageURL = dictionary["profileImageURL"] as? String
+    }
 }

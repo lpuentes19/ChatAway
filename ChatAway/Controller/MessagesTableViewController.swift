@@ -56,11 +56,7 @@ class MessagesTableViewController: UITableViewController {
         
         messageRef.observeSingleEvent(of: .value, with: { (snapshot) in
             if let dict = snapshot.value as? [String: Any] {
-                let message = Message()
-                message.toID = dict["toID"] as? String
-                message.fromID = dict["fromID"] as? String
-                message.text = dict["text"] as? String
-                message.timestamp = dict["timestamp"] as? NSNumber
+                let message = Message(dictionary: dict)
                 
                 if let chatPartnerID = message.chatPartnerID() {
                     self.messagesDictionary[chatPartnerID] = message
@@ -156,11 +152,9 @@ class MessagesTableViewController: UITableViewController {
         
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
             guard let dict = snapshot.value as? [String: Any] else { return }
-            let user = UserModel()
+            
+            let user = UserModel(dictionary: dict)
             user.id = chatPartnerID
-            user.name = dict["name"] as? String
-            user.email = dict["email"] as? String
-            user.profileImageURL = dict["profileImageURL"] as? String
             self.showChatLogVCForUser(user: user)
         })
     }

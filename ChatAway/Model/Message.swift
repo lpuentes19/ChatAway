@@ -17,6 +17,14 @@ class Message {
     var timestamp: NSNumber?
     var imageURL: String?
     
+    init(dictionary: [String: Any]) {
+        fromID = dictionary["fromID"] as? String
+        text = dictionary["text"] as? String
+        toID = dictionary["toID"] as? String
+        timestamp = dictionary["timestamp"] as? NSNumber
+        imageURL = dictionary["imageURL"] as? String
+    }
+    
     func chatPartnerID() -> String? {
         if fromID == Auth.auth().currentUser?.uid {
             return toID

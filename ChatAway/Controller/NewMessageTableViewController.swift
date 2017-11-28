@@ -32,15 +32,15 @@ class NewMessageTableViewController: UITableViewController {
     func fetchUser() {
         Database.database().reference().child("Users").observe(.childAdded, with: { (snapshot) in
             if let dict = snapshot.value as? [String: Any] {
-                let user = UserModel()
-
-                user.name = dict["name"] as? String
-                user.email = dict["email"] as? String
+                
+                let user = UserModel(dictionary: dict)
                 user.id = snapshot.key
-                user.profileImageURL = dict["profileImageURL"] as? String
-
+                
                 self.users.append(user)
-                self.tableView.reloadData()
+                
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
             }
         })
     }

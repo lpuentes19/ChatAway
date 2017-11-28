@@ -52,7 +52,7 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
         uploadImageView.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
         let sendButton = UIButton(type: .system)
-        sendButton.setTitle("Send", for: .normal)
+        sendButton.setTitle("Send", for: UIControlState())
         sendButton.addTarget(self, action: #selector(handleSend), for: .touchUpInside)
         sendButton.translatesAutoresizingMaskIntoConstraints = false
 
@@ -154,12 +154,13 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
     
     @objc func handleUploadImageTap() {
         let imagePickerController = UIImagePickerController()
-        imagePickerController.delegate = self
         imagePickerController.allowsEditing = true
+        imagePickerController.delegate = self
+        
         present(imagePickerController, animated: true, completion: nil)
     }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+   func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         var selectedImageFromPicker: UIImage?
         
         if let editedImage = info["UIImagePickerControllerEditedImage"] as? UIImage {
@@ -177,11 +178,11 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
         dismiss(animated: true, completion: nil)
     }
     
-    private func uploadToFirebaseStorageUsingImage(image: UIImage) {
+    fileprivate func uploadToFirebaseStorageUsingImage(image: UIImage) {
         let imageName = NSUUID().uuidString
         let ref = Storage.storage().reference().child("Message Images").child("\(imageName).png")
         
-        if let uploadData = UIImageJPEGRepresentation(image, 0.1) {
+        if let uploadData = UIImageJPEGRepresentation(image, 0.2) {
             ref.putData(uploadData, metadata: nil, completion: { (metadata, error) in
                 if error != nil {
                     print("Failed to upload message image: \(error!.localizedDescription)")
@@ -195,7 +196,7 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
         }
     }
     
-    private func sendMessageWithImageURL(imageURL: String) {
+    fileprivate func sendMessageWithImageURL(imageURL: String) {
         let ref = Database.database().reference().child("Messages")
         let childRef = ref.childByAutoId()
         let toID = user!.id!
@@ -240,7 +241,7 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
         }
     }
     
-    private func setupCell(cell: ChatLogCollectionViewCell, message: Message) {
+    fileprivate func setupCell(cell: ChatLogCollectionViewCell, message: Message) {
         if let profileImageURL = self.user?.profileImageURL {
             cell.profileImageView.loadImageUsingCacheWith(urlString: profileImageURL)
         }
@@ -287,11 +288,8 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
             let messagesRef = Database.database().reference().child("Messages").child(messageID)
             messagesRef.observeSingleEvent(of: .value, with: { (snapshot) in
                 guard let dict = snapshot.value as? [String: Any] else { return }
-                let message = Message()
-                message.toID = dict["toID"] as? String
-                message.fromID = dict["fromID"] as? String
-                message.text = dict["text"] as? String
-                message.timestamp = dict["timestamp"] as? NSNumber
+                
+                let message = Message(dictionary: dict)
                 
                 self.messages.append(message)
                 DispatchQueue.main.async {
