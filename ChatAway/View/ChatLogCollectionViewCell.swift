@@ -17,6 +17,7 @@ class ChatLogCollectionViewCell: UICollectionViewCell {
     
     let textView: UITextView = {
         let text = UITextView()
+        text.isEditable = false
         text.font = UIFont.systemFont(ofSize: 16)
         text.backgroundColor = .clear
         text.textColor = .white

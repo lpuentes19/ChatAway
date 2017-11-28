@@ -132,6 +132,8 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
         
         if let text = message.text {
             cell.bubbleWidthAnchor?.constant = estimateFrameForText(text: text).width + 32
+        } else if message.imageURL != nil {
+            cell.bubbleWidthAnchor?.constant = 200
         }
         
         return cell
@@ -140,8 +142,11 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var height: CGFloat = 80
         
-        if let text = messages[indexPath.item].text {
+        let message = messages[indexPath.item]
+        if let text = message.text {
             height = estimateFrameForText(text: text).height + 20
+        } else if let imageWidth = message.imageWidth?.floatValue, let imageHeight = message.imageHeight?.floatValue {
+            height = CGFloat(imageHeight / imageWidth * 200)
         }
         let width = UIScreen.main.bounds.width
         return CGSize(width: width, height: height)
@@ -176,50 +181,6 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: nil)
-    }
-    
-    fileprivate func uploadToFirebaseStorageUsingImage(image: UIImage) {
-        let imageName = NSUUID().uuidString
-        let ref = Storage.storage().reference().child("Message Images").child("\(imageName).png")
-        
-        if let uploadData = UIImageJPEGRepresentation(image, 0.2) {
-            ref.putData(uploadData, metadata: nil, completion: { (metadata, error) in
-                if error != nil {
-                    print("Failed to upload message image: \(error!.localizedDescription)")
-                    return
-                }
-                
-                if let imageURL = metadata?.downloadURL()?.absoluteString {
-                    self.sendMessageWithImageURL(imageURL: imageURL, image: image)
-                }
-            })
-        }
-    }
-    
-    fileprivate func sendMessageWithImageURL(imageURL: String, image: UIImage) {
-        let ref = Database.database().reference().child("Messages")
-        let childRef = ref.childByAutoId()
-        let toID = user!.id!
-        let fromID = Auth.auth().currentUser!.uid
-        let timestamp: Int = Int(NSDate().timeIntervalSince1970)
-        let values = ["imageURL": imageURL, "toID": toID, "fromID": fromID, "timestamp": timestamp, "imageWidth": image.size.width, "imageHeight": image.size.height] as [String : Any]
-        
-        childRef.updateChildValues(values, withCompletionBlock: { (error, ref) in
-            if error != nil {
-                print(error!.localizedDescription)
-                return
-            }
-            
-            self.inputTextField.text = nil
-            
-            let userMessagesRef = Database.database().reference().child("User-Messages").child(fromID).child(toID)
-            
-            let messageID = childRef.key
-            userMessagesRef.updateChildValues([messageID: 1])
-            
-            let recipientUserMessagesRef = Database.database().reference().child("User-Messages").child(toID).child(fromID)
-            recipientUserMessagesRef.updateChildValues([messageID: 1])
-        })
     }
     
     @objc func handleKeyboardWillShow(notification: Notification) {
@@ -294,6 +255,8 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
                 self.messages.append(message)
                 DispatchQueue.main.async {
                     self.collectionView?.reloadData()
+                    let indexPath = IndexPath(item: self.messages.count - 1, section: 0)
+                    self.collectionView?.scrollToItem(at: indexPath, at: .bottom, animated: true)
                 }
             })
         })
@@ -304,29 +267,61 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
         if text == "" {
             return
         } else {
-            let ref = Database.database().reference().child("Messages")
-            let childRef = ref.childByAutoId()
-            let toID = user!.id!
-            let fromID = Auth.auth().currentUser!.uid
-            let timestamp: Int = Int(NSDate().timeIntervalSince1970)
-            let values = ["text": text, "toID": toID, "fromID": fromID, "timestamp": timestamp] as [String : Any]
-            
-            childRef.updateChildValues(values, withCompletionBlock: { (error, ref) in
+            let properties: [String: Any] = ["text": text]
+            sendMessageWithProperties(properties: properties)
+        }
+    }
+    
+    fileprivate func uploadToFirebaseStorageUsingImage(image: UIImage) {
+        let imageName = NSUUID().uuidString
+        let ref = Storage.storage().reference().child("Message Images").child("\(imageName).png")
+        
+        if let uploadData = UIImageJPEGRepresentation(image, 0.2) {
+            ref.putData(uploadData, metadata: nil, completion: { (metadata, error) in
                 if error != nil {
-                    print(error!.localizedDescription)
+                    print("Failed to upload message image: \(error!.localizedDescription)")
                     return
                 }
                 
-                self.inputTextField.text = nil
-                
-                let userMessagesRef = Database.database().reference().child("User-Messages").child(fromID).child(toID)
-                
-                let messageID = childRef.key
-                userMessagesRef.updateChildValues([messageID: 1])
-                
-                let recipientUserMessagesRef = Database.database().reference().child("User-Messages").child(toID).child(fromID)
-                recipientUserMessagesRef.updateChildValues([messageID: 1])
+                if let imageURL = metadata?.downloadURL()?.absoluteString {
+                    self.sendMessageWithImageURL(imageURL: imageURL, image: image)
+                }
             })
         }
+    }
+    
+    fileprivate func sendMessageWithImageURL(imageURL: String, image: UIImage) {
+        let properties: [String: Any] = ["imageURL": imageURL, "imageWidth": image.size.width, "imageHeight": image.size.height]
+        sendMessageWithProperties(properties: properties)
+    }
+    
+    private func sendMessageWithProperties(properties: [String: Any]) {
+        let ref = Database.database().reference().child("Messages")
+        let childRef = ref.childByAutoId()
+        let toID = user!.id!
+        let fromID = Auth.auth().currentUser!.uid
+        let timestamp: Int = Int(NSDate().timeIntervalSince1970)
+        var values: [String : Any] = ["toID": toID, "fromID": fromID, "timestamp": timestamp]
+        
+        // Appending properties dictionary onto values
+        // Key $0, Value $1
+        properties.forEach({ values[$0] = $1 })
+        
+        childRef.updateChildValues(values, withCompletionBlock: { (error, ref) in
+            if error != nil {
+                print(error!.localizedDescription)
+                return
+            }
+            
+            self.inputTextField.text = nil
+            
+            let userMessagesRef = Database.database().reference().child("User-Messages").child(fromID).child(toID)
+            
+            let messageID = childRef.key
+            userMessagesRef.updateChildValues([messageID: 1])
+            
+            let recipientUserMessagesRef = Database.database().reference().child("User-Messages").child(toID).child(fromID)
+            recipientUserMessagesRef.updateChildValues([messageID: 1])
+        })
     }
 }
