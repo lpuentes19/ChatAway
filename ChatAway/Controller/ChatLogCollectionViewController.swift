@@ -190,19 +190,19 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
                 }
                 
                 if let imageURL = metadata?.downloadURL()?.absoluteString {
-                    self.sendMessageWithImageURL(imageURL: imageURL)
+                    self.sendMessageWithImageURL(imageURL: imageURL, image: image)
                 }
             })
         }
     }
     
-    fileprivate func sendMessageWithImageURL(imageURL: String) {
+    fileprivate func sendMessageWithImageURL(imageURL: String, image: UIImage) {
         let ref = Database.database().reference().child("Messages")
         let childRef = ref.childByAutoId()
         let toID = user!.id!
         let fromID = Auth.auth().currentUser!.uid
         let timestamp: Int = Int(NSDate().timeIntervalSince1970)
-        let values = ["imageURL": imageURL, "toID": toID, "fromID": fromID, "timestamp": timestamp] as [String : Any]
+        let values = ["imageURL": imageURL, "toID": toID, "fromID": fromID, "timestamp": timestamp, "imageWidth": image.size.width, "imageHeight": image.size.height] as [String : Any]
         
         childRef.updateChildValues(values, withCompletionBlock: { (error, ref) in
             if error != nil {
