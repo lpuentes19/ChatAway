@@ -104,7 +104,7 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
         collectionView?.register(ChatLogCollectionViewCell.self, forCellWithReuseIdentifier: cellID)
         collectionView?.keyboardDismissMode = .interactive
         
-//        setupKeyboardObservers()
+        setupKeyboardObservers()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -153,8 +153,18 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
     }
     
     func setupKeyboardObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardDidShow), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        
+//        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    @objc func handleKeyboardDidShow() {
+        if messages.count > 0 {
+            let indexPath = IndexPath(item: messages.count - 1, section: 0)
+            collectionView?.scrollToItem(at: indexPath, at: .top, animated: true)
+        }
     }
     
     @objc func handleUploadImageTap() {
