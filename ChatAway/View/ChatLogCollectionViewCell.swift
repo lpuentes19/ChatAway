@@ -49,6 +49,9 @@ class ChatLogCollectionViewCell: UICollectionViewCell {
         imageView.layer.masksToBounds = true
         imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.isUserInteractionEnabled = true
+        
+        imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomTap)))
         return imageView
     }()
     
@@ -89,6 +92,10 @@ class ChatLogCollectionViewCell: UICollectionViewCell {
         textView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         textView.heightAnchor.constraint(equalTo: self.heightAnchor).isActive = true
         // textView.widthAnchor.constraint(equalToConstant: 200).isActive = true
+    }
+    
+    @objc func handleZoomTap() {
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
