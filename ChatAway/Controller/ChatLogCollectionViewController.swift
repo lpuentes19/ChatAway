@@ -220,24 +220,45 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
     }
 
     private func handleVideosSelectedForURL(url: URL) {
-        let filename = "somefilename.mov"
-        let uploadTask = Storage.storage().reference().child(filename).putFile(from: url, metadata: nil, completion: { (metadata, error) in
+        let filename = UUID().uuidString + ".mov"
+        let uploadTask = Storage.storage().reference().child("MessageVideos").child(filename).putFile(from: url, metadata: nil, completion: { (metadata, error) in
             if error != nil {
                 print(error!.localizedDescription)
                 return
             }
-            if let storageURL = metadata?.downloadURL()?.absoluteString {
-                print(storageURL)
+            if let videoURL = metadata?.downloadURL()?.absoluteString {
+                if let thumbnailImage = self.thumbnailImageForFileURL(url: url) {
+                    self.uploadToFirebaseStorageUsingImage(image: thumbnailImage, completion: { (imageURL) in
+                        let properties: [String: Any] = ["imageURL": imageURL, "videoURL": videoURL,"imageWidth": thumbnailImage.size.width, "imageHeight": thumbnailImage.size.height]
+                        self.sendMessageWithProperties(properties: properties)
+                    })
+                }
             }
         })
+        // Unit count that shows the video progress of it being compressed and stored in Firebase
         uploadTask.observe(.progress) { (snapshot) in
             if let completedUnitCount = snapshot.progress?.completedUnitCount {
-                self.navigationItem.title = String(completedUnitCount)
+                self.navigationItem.title = String("\(completedUnitCount / 100)%")
             }
         }
+        // Changing the navbar title back to the users name
         uploadTask.observe(.success) { (snapshot) in
             self.navigationItem.title = self.user?.name
         }
+    }
+    
+    private func thumbnailImageForFileURL(url: URL) -> UIImage? {
+        let asset = AVAsset(url: url)
+        let imageGenerator = AVAssetImageGenerator(asset: asset)
+        
+        do {
+            let thumbnailCGImage = try imageGenerator.copyCGImage(at: CMTimeMake(1, 60), actualTime: nil)
+            return UIImage(cgImage: thumbnailCGImage)
+            
+        } catch let error {
+            print(error.localizedDescription)
+        }
+        return nil
     }
     
     private func handleImageSelectedForInfo(info: [String: Any]) {
@@ -249,7 +270,9 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
             selectedImageFromPicker = originalImage
         }
         if let selectedImage = selectedImageFromPicker {
-            uploadToFirebaseStorageUsingImage(image: selectedImage)
+            uploadToFirebaseStorageUsingImage(image: selectedImage, completion: { (imageURL) in
+                self.sendMessageWithImageURL(imageURL: imageURL, image: selectedImage)
+            })
         }
     }
     
@@ -373,19 +396,20 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
         }
     }
     
-    fileprivate func uploadToFirebaseStorageUsingImage(image: UIImage) {
+    private func uploadToFirebaseStorageUsingImage(image: UIImage, completion: @escaping (_ imageURL: String) -> ()) {
         let imageName = NSUUID().uuidString
         let ref = Storage.storage().reference().child("Message Images").child("\(imageName).png")
         
         if let uploadData = UIImageJPEGRepresentation(image, 0.2) {
             ref.putData(uploadData, metadata: nil, completion: { (metadata, error) in
                 if error != nil {
-                    print("Failed to upload message image: \(error!.localizedDescription)")
+                    print("Failed to upload image: \(error!.localizedDescription)")
                     return
                 }
                 
                 if let imageURL = metadata?.downloadURL()?.absoluteString {
-                    self.sendMessageWithImageURL(imageURL: imageURL, image: image)
+                    completion(imageURL)
+//                    self.sendMessageWithImageURL(imageURL: imageURL, image: image)
                 }
             })
         }
