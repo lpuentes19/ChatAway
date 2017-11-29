@@ -10,6 +10,8 @@ import UIKit
 
 class ChatLogCollectionViewCell: UICollectionViewCell {
     
+    // MARK: Properties
+    var chatLogCollectionViewController: ChatLogCollectionViewController?
     var bubbleWidthAnchor: NSLayoutConstraint?
     var bubbleViewRightAnchor: NSLayoutConstraint?
     var bubbleViewLeftAnchor: NSLayoutConstraint?
@@ -22,6 +24,7 @@ class ChatLogCollectionViewCell: UICollectionViewCell {
         text.backgroundColor = .clear
         text.textColor = .white
         text.translatesAutoresizingMaskIntoConstraints = false
+        
         return text
     }()
     
@@ -31,6 +34,7 @@ class ChatLogCollectionViewCell: UICollectionViewCell {
         view.layer.cornerRadius = 16
         view.layer.masksToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
+        
         return view
     }()
     
@@ -40,10 +44,11 @@ class ChatLogCollectionViewCell: UICollectionViewCell {
         imageView.layer.masksToBounds = true
         imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        
         return imageView
     }()
     
-    let messageImageView: UIImageView = {
+    lazy var messageImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 16
         imageView.layer.masksToBounds = true
@@ -52,8 +57,14 @@ class ChatLogCollectionViewCell: UICollectionViewCell {
         imageView.isUserInteractionEnabled = true
         
         imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomTap)))
+        
         return imageView
     }()
+    
+    @objc func handleZoomTap(tapGesture: UITapGestureRecognizer) {
+        guard let imageView = tapGesture.view as? UIImageView else { return }
+        chatLogCollectionViewController?.performZoomInForStartingImageView(startingImageView: imageView)
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -92,10 +103,6 @@ class ChatLogCollectionViewCell: UICollectionViewCell {
         textView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         textView.heightAnchor.constraint(equalTo: self.heightAnchor).isActive = true
         // textView.widthAnchor.constraint(equalToConstant: 200).isActive = true
-    }
-    
-    @objc func handleZoomTap() {
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
