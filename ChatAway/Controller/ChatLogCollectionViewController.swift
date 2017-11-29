@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import MobileCoreServices
+import AVFoundation
 import FirebaseAuth
 import FirebaseDatabase
 import FirebaseStorage
@@ -196,11 +198,49 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
         let imagePickerController = UIImagePickerController()
         imagePickerController.allowsEditing = true
         imagePickerController.delegate = self
+        imagePickerController.mediaTypes = [kUTTypeImage as String, kUTTypeMovie as String]
         
         present(imagePickerController, animated: true, completion: nil)
     }
     
-   func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        if let videoURL = info[UIImagePickerControllerMediaURL] as? URL {
+            // Selected a video
+            handleVideosSelectedForURL(url: videoURL)
+        } else {
+            // Selected an image
+            handleImageSelectedForInfo(info: info)
+        }
+        dismiss(animated: true, completion: nil)
+    }
+
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
+
+    private func handleVideosSelectedForURL(url: URL) {
+        let filename = "somefilename.mov"
+        let uploadTask = Storage.storage().reference().child(filename).putFile(from: url, metadata: nil, completion: { (metadata, error) in
+            if error != nil {
+                print(error!.localizedDescription)
+                return
+            }
+            if let storageURL = metadata?.downloadURL()?.absoluteString {
+                print(storageURL)
+            }
+        })
+        uploadTask.observe(.progress) { (snapshot) in
+            if let completedUnitCount = snapshot.progress?.completedUnitCount {
+                self.navigationItem.title = String(completedUnitCount)
+            }
+        }
+        uploadTask.observe(.success) { (snapshot) in
+            self.navigationItem.title = self.user?.name
+        }
+    }
+    
+    private func handleImageSelectedForInfo(info: [String: Any]) {
         var selectedImageFromPicker: UIImage?
         
         if let editedImage = info["UIImagePickerControllerEditedImage"] as? UIImage {
@@ -211,11 +251,6 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
         if let selectedImage = selectedImageFromPicker {
             uploadToFirebaseStorageUsingImage(image: selectedImage)
         }
-        dismiss(animated: true, completion: nil)
-    }
-    
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        dismiss(animated: true, completion: nil)
     }
     
     @objc func handleKeyboardWillShow(notification: Notification) {
