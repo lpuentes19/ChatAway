@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import AVFoundation
 
 class ChatLogCollectionViewCell: UICollectionViewCell {
     
     // MARK: Properties
     var chatLogCollectionViewController: ChatLogCollectionViewController?
+    var message: Message?
     var bubbleWidthAnchor: NSLayoutConstraint?
     var bubbleViewRightAnchor: NSLayoutConstraint?
     var bubbleViewLeftAnchor: NSLayoutConstraint?
@@ -55,11 +57,28 @@ class ChatLogCollectionViewCell: UICollectionViewCell {
         imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.isUserInteractionEnabled = true
-        
         imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomTap)))
         
         return imageView
     }()
+    
+    let playButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.tintColor = .white
+        button.translatesAutoresizingMaskIntoConstraints = false
+        let image = UIImage(named: "play")
+        button.setImage(image, for: .normal)
+        button.addTarget(self, action: #selector(handlePlay), for: .touchUpInside)
+        
+        return button
+    }()
+    
+    @objc func handlePlay() {
+        if let videoURLString = message?.videoURL, let url = URL(string: videoURLString) {
+            let player = AVPlayer(url: url)
+            player.play()
+        }
+    }
     
     @objc func handleZoomTap(tapGesture: UITapGestureRecognizer) {
         guard let imageView = tapGesture.view as? UIImageView else { return }
@@ -74,12 +93,19 @@ class ChatLogCollectionViewCell: UICollectionViewCell {
         addSubview(profileImageView)
         
         bubbleView.addSubview(messageImageView)
-        
         // MessageImageView Contraints
         messageImageView.leftAnchor.constraint(equalTo: bubbleView.leftAnchor).isActive = true
         messageImageView.topAnchor.constraint(equalTo: bubbleView.topAnchor).isActive = true
         messageImageView.widthAnchor.constraint(equalTo: bubbleView.widthAnchor).isActive = true
         messageImageView.heightAnchor.constraint(equalTo: bubbleView.heightAnchor).isActive = true
+        
+        bubbleView.addSubview(playButton)
+        // Play Button Constraints
+        playButton.centerXAnchor.constraint(equalTo: bubbleView.centerXAnchor).isActive = true
+        playButton.centerYAnchor.constraint(equalTo: bubbleView.centerYAnchor).isActive = true
+        playButton.widthAnchor.constraint(equalTo: bubbleView.widthAnchor).isActive = true
+        playButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        playButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         // ProfileImageView Constraints
         profileImageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8).isActive = true
