@@ -51,6 +51,10 @@ class MessagesTableViewController: UITableViewController {
                 self.fetchMessageWithMessageID(messageID: messageID)
             })
         })
+        ref.observe(.childRemoved, with: { (snapshot) in
+            self.messagesDictionary.removeValue(forKey: snapshot.key)
+            self.attemptReloadOfTable()
+        })
     }
     
    private func fetchMessageWithMessageID(messageID: String) {
@@ -165,6 +169,7 @@ class MessagesTableViewController: UITableViewController {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         let message = self.messages[indexPath.row]
+        
         if let chatPartnerID = message.chatPartnerID() {
             Database.database().reference().child("User-Messages").child(uid).child(chatPartnerID).removeValue(completionBlock: { (error, ref) in
                 if error != nil {
@@ -173,6 +178,8 @@ class MessagesTableViewController: UITableViewController {
                 }
                 self.messagesDictionary.removeValue(forKey: chatPartnerID)
                 self.attemptReloadOfTable()
+                
+                // This is one way of updating the table, but not the safest way
 //                self.messages.remove(at: indexPath.row)
 //                self.tableView.deleteRows(at: [indexPath], with: .automatic)
             })
