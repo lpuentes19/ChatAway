@@ -14,6 +14,8 @@ class ChatLogCollectionViewCell: UICollectionViewCell {
     // MARK: Properties
     var chatLogCollectionViewController: ChatLogCollectionViewController?
     var message: Message?
+    var playerLayer: AVPlayerLayer?
+    var player: AVPlayer?
     var bubbleWidthAnchor: NSLayoutConstraint?
     var bubbleViewRightAnchor: NSLayoutConstraint?
     var bubbleViewLeftAnchor: NSLayoutConstraint?
@@ -62,7 +64,7 @@ class ChatLogCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
     
-    let playButton: UIButton = {
+    lazy var playButton: UIButton = {
         let button = UIButton(type: .system)
         button.tintColor = .white
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -73,20 +75,43 @@ class ChatLogCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
+    let activityIndicatorView: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        
+        return activityIndicator
+    }()
+    
     @objc func handlePlay() {
         if let videoURLString = message?.videoURL, let url = URL(string: videoURLString) {
-            let player = AVPlayer(url: url)
-            let playerLayer = AVPlayerLayer(player: player)
-            playerLayer.frame = bubbleView.bounds
-            bubbleView.layer.addSublayer(playerLayer)
+            player = AVPlayer(url: url)
+            playerLayer = AVPlayerLayer(player: player)
+            playerLayer?.frame = bubbleView.bounds
+            bubbleView.layer.addSublayer(playerLayer!)
             
-            player.play()
+            player?.play()
+            activityIndicatorView.startAnimating()
+            playButton.isHidden = true
         }
     }
     
     @objc func handleZoomTap(tapGesture: UITapGestureRecognizer) {
+        // Disables the zoom in on any video messages
+        if message?.videoURL != nil {
+            return
+        }
+        
         guard let imageView = tapGesture.view as? UIImageView else { return }
         chatLogCollectionViewController?.performZoomInForStartingImageView(startingImageView: imageView)
+    }
+    
+    // Everytime we reuse a cell, this will be called
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        playerLayer?.removeFromSuperlayer()
+        player?.pause()
+        activityIndicatorView.stopAnimating()
     }
     
     override init(frame: CGRect) {
@@ -110,6 +135,14 @@ class ChatLogCollectionViewCell: UICollectionViewCell {
         playButton.widthAnchor.constraint(equalTo: bubbleView.widthAnchor).isActive = true
         playButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
         playButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        bubbleView.addSubview(activityIndicatorView)
+        // Play Button Constraints
+        activityIndicatorView.centerXAnchor.constraint(equalTo: bubbleView.centerXAnchor).isActive = true
+        activityIndicatorView.centerYAnchor.constraint(equalTo: bubbleView.centerYAnchor).isActive = true
+        activityIndicatorView.widthAnchor.constraint(equalTo: bubbleView.widthAnchor).isActive = true
+        activityIndicatorView.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        activityIndicatorView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         // ProfileImageView Constraints
         profileImageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8).isActive = true
