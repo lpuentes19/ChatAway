@@ -76,6 +76,10 @@ class ChatLogCollectionViewCell: UICollectionViewCell {
     @objc func handlePlay() {
         if let videoURLString = message?.videoURL, let url = URL(string: videoURLString) {
             let player = AVPlayer(url: url)
+            let playerLayer = AVPlayerLayer(player: player)
+            playerLayer.frame = bubbleView.bounds
+            bubbleView.layer.addSublayer(playerLayer)
+            
             player.play()
         }
     }
