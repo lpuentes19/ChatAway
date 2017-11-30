@@ -25,6 +25,8 @@ class MessagesTableViewController: UITableViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(handleNewMessage))
         tableView.register(UserDetailTableViewCell.self, forCellReuseIdentifier: cellID)
         
+        tableView.allowsMultipleSelectionDuringEditing = true // Need to set in order to reveal the delete button
+        
         checkIfUserIsLoggedIn()
     }
     
@@ -157,5 +159,27 @@ class MessagesTableViewController: UITableViewController {
             user.id = chatPartnerID
             self.showChatLogVCForUser(user: user)
         })
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let message = self.messages[indexPath.row]
+        if let chatPartnerID = message.chatPartnerID() {
+            Database.database().reference().child("User-Messages").child(uid).child(chatPartnerID).removeValue(completionBlock: { (error, ref) in
+                if error != nil {
+                    print("Failed to delete message:", error!)
+                    return
+                }
+                self.messagesDictionary.removeValue(forKey: chatPartnerID)
+                self.attemptReloadOfTable()
+//                self.messages.remove(at: indexPath.row)
+//                self.tableView.deleteRows(at: [indexPath], with: .automatic)
+            })
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
     }
 }
