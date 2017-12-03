@@ -20,6 +20,7 @@
 		953099EF1FAA5A9500BF6E5F /* NewMessageTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 953099EE1FAA5A9500BF6E5F /* NewMessageTableViewController.swift */; };
 		953099F11FAA5DDD00BF6E5F /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 953099F01FAA5DDD00BF6E5F /* UserModel.swift */; };
 		953099F41FAA700300BF6E5F /* UserDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 953099F31FAA700300BF6E5F /* UserDetailTableViewCell.swift */; };
+		9545055A1FD4A397002B5B62 /* ChatInputContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954505591FD4A397002B5B62 /* ChatInputContainerView.swift */; };
 		95E0448A1FB155C400ABDAC0 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E044891FB155C400ABDAC0 /* Message.swift */; };
 		95FD05AE1FB1296300AED858 /* ChatLogCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FD05AD1FB1296300AED858 /* ChatLogCollectionViewController.swift */; };
 		CDF5D0C05F22584DC5920105 /* Pods_ChatAway.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACF96BD5613173CF3172B521 /* Pods_ChatAway.framework */; };
@@ -41,6 +42,7 @@
 		953099EE1FAA5A9500BF6E5F /* NewMessageTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMessageTableViewController.swift; sourceTree = "<group>"; };
 		953099F01FAA5DDD00BF6E5F /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		953099F31FAA700300BF6E5F /* UserDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailTableViewCell.swift; sourceTree = "<group>"; };
+		954505591FD4A397002B5B62 /* ChatInputContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInputContainerView.swift; sourceTree = "<group>"; };
 		95E044891FB155C400ABDAC0 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		95FD05AD1FB1296300AED858 /* ChatLogCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLogCollectionViewController.swift; sourceTree = "<group>"; };
 		A80E802C832F8263F1C0283E /* Pods-ChatAway.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatAway.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatAway/Pods-ChatAway.debug.xcconfig"; sourceTree = "<group>"; };
@@ -154,6 +156,7 @@
 			children = (
 				953099F31FAA700300BF6E5F /* UserDetailTableViewCell.swift */,
 				952402F01FBD1CAE00205F80 /* ChatLogCollectionViewCell.swift */,
+				954505591FD4A397002B5B62 /* ChatInputContainerView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -283,6 +286,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				952305791FA7F7FF0064A4BC /* UIColor+Extension.swift in Sources */,
+				9545055A1FD4A397002B5B62 /* ChatInputContainerView.swift in Sources */,
 				952402F11FBD1CAE00205F80 /* ChatLogCollectionViewCell.swift in Sources */,
 				952305761FA7F7AF0064A4BC /* LoginViewController.swift in Sources */,
 				953099F11FAA5DDD00BF6E5F /* UserModel.swift in Sources */,

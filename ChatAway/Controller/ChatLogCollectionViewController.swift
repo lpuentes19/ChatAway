@@ -31,60 +31,11 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
     var blackBackgroundView: UIView?
     var startingImageView: UIImageView?
     
-    let inputTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "Enter message..."
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        return textField
-    }()
-    
-    lazy var inputContainerView: UIView = {
-        let containerView = UIView()
-        containerView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 50)
-        containerView.backgroundColor = .white
+    // Input Container View - The rest of the code can be found in ChatInputContainerView file
+    lazy var inputContainerView: ChatInputContainerView = {
+        let containerView = ChatInputContainerView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 50))
+        containerView.chatLogController = self
         
-        let uploadImageView = UIImageView()
-        uploadImageView.image = UIImage(named: "addPicture")
-        uploadImageView.isUserInteractionEnabled = true
-        uploadImageView.translatesAutoresizingMaskIntoConstraints = false
-        uploadImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleUploadImageTap)))
-        
-        containerView.addSubview(uploadImageView)
-
-        uploadImageView.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 8).isActive = true
-        uploadImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
-        uploadImageView.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        uploadImageView.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        
-        let sendButton = UIButton(type: .system)
-        sendButton.setTitle("Send", for: UIControlState())
-        sendButton.addTarget(self, action: #selector(handleSend), for: .touchUpInside)
-        sendButton.translatesAutoresizingMaskIntoConstraints = false
-
-        containerView.addSubview(sendButton)
-
-        sendButton.rightAnchor.constraint(equalTo: containerView.rightAnchor).isActive = true
-        sendButton.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
-        sendButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
-        sendButton.heightAnchor.constraint(equalTo: containerView.heightAnchor).isActive = true
-
-        containerView.addSubview(inputTextField)
-
-        inputTextField.leftAnchor.constraint(equalTo: uploadImageView.rightAnchor, constant: 8).isActive = true
-        inputTextField.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
-        inputTextField.rightAnchor.constraint(equalTo: sendButton.leftAnchor).isActive = true
-        inputTextField.heightAnchor.constraint(equalTo: containerView.heightAnchor).isActive = true
-
-        let separatorLineView = UIView()
-        separatorLineView.backgroundColor = UIColor(r: 220, g: 220, b: 220)
-        separatorLineView.translatesAutoresizingMaskIntoConstraints = false
-        containerView.addSubview(separatorLineView)
-
-        separatorLineView.leftAnchor.constraint(equalTo: containerView.leftAnchor).isActive = true
-        separatorLineView.topAnchor.constraint(equalTo: containerView.topAnchor).isActive = true
-        separatorLineView.widthAnchor.constraint(equalTo: containerView.widthAnchor).isActive = true
-        separatorLineView.heightAnchor.constraint(equalToConstant: 1).isActive = true
-
         return containerView
     }()
 
@@ -397,7 +348,7 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
     }
     
     @objc func handleSend() {
-        guard let text = inputTextField.text else { return }
+        guard let text = inputContainerView.inputTextField.text else { return }
         if text == "" {
             return
         } else {
@@ -448,7 +399,7 @@ class ChatLogCollectionViewController: UICollectionViewController, UICollectionV
                 return
             }
             
-            self.inputTextField.text = nil
+            self.inputContainerView.inputTextField.text = nil
             
             let userMessagesRef = Database.database().reference().child("User-Messages").child(fromID).child(toID)
             
